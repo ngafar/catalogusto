@@ -26,7 +26,12 @@ def create_product(request):
     pass
 
 def read_product(request, product_id):
-    pass 
+    context_dict = {}
+
+    product = Product.objects.get(id=product_id) 
+    context_dict['product'] = product
+
+    return render(request, 'store/product-read.html', context_dict)
 
 def update_product(request, product_id):
     pass
