@@ -3,20 +3,20 @@ from . import views, api
 
 urlpatterns = [
     # views.py
-    path('store/create/', views.create_store),
-    path('store/read/<int:store_id>/', views.read_store),
-    path('store/update/<int:store_id>/', views.update_store),
-    path('store/delete/<int:store_id>/', views.delete_store),
+    path('store/new/', views.create_store),
+    path('store/<int:store_id>/', views.read_store),
+    path('store/<int:store_id>/edit/', views.update_store),
+    path('store/<int:store_id>/delete/', views.delete_store),
     
     path('store/<int:store_id>/add-product/', views.create_product),
-    path('product/read/<int:product_id>/', views.read_product),
-    path('product/update/<int:product_id>/', views.update_product),
-    path('product/delete/<int:product_id>/', views.delete_product),
+    path('product/<int:product_id>/', views.read_product),
+    path('product/<int:product_id>/edit/', views.update_product),
+    path('product/<int:product_id>/delete/', views.delete_product),
 
     path('product/<int:product_id>/add-variant', views.create_variant),
-    path('variant/read/<int:variant_id>/', views.read_variant),
-    path('variant/update/<int:variant_id>/', views.update_variant),
-    path('variant/delete/<int:variant_id>/', views.delete_variant),
+    path('variant/<int:variant_id>/', views.read_variant),
+    path('variant/<int:variant_id>/edit/', views.update_variant),
+    path('variant/<int:variant_id>/delete/', views.delete_variant),
 
     # api.py
     path('api/all-products/', api.all_products),
