@@ -1,3 +1,28 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponse
 
-# Create your views here.
+def user_login(request):
+    if request.user.is_authenticated:
+        return HttpResponseRedirect('/')
+    else:
+        pass
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                return(HttpResponse("Your Account is disabled"))
+        else:
+            return render(request, "userauth/login.html", {'invalid': True })
+
+    else:
+        return render(request, 'userauth/login.html', {})
