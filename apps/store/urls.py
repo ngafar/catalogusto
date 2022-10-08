@@ -3,4 +3,5 @@ from . import views, api
 
 urlpatterns = [
     path('api/all-products/', api.all_products),
+    path('api/product/<int:product_id>/', api.specific_product),
 ]
