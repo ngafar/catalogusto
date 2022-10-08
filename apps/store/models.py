@@ -3,7 +3,12 @@ from django.utils.text import slugify
 
 class Store(models.Model):
     name = models.CharField(max_length=255)
+    currency = models.CharField(max_length=3, default='usd')
     stripe_secret_key = models.CharField(max_length=55)
+    
+    def save(self, *args, **kwargs):
+        self.currency = lower(self.currency)
+        super(Store, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name 

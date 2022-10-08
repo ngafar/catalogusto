@@ -42,6 +42,9 @@ def create_product(request, store_id):
             # Create product in Stripe:
             stripe_prod_obj = stripe.Product.create(
                 name = product.name, 
+                default_price_data = {
+                    'currency': store.currency, 
+                    'unit_amount_decimal': product.price * 100},
                 api_key = store.stripe_secret_key)
 
             product.stripe_prod_id = stripe_prod_obj['id']
