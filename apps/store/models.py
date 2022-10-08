@@ -17,6 +17,7 @@ class Product(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
     handle = models.SlugField(blank=True, null=True)
+    stripe_prod_id = models.CharField(max_length=55, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.handle is None:
