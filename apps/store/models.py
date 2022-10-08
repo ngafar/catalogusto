@@ -16,7 +16,7 @@ class Product(models.Model):
     store = models.ForeignKey(Store, blank=True, null=True, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
-    handle = models.SlugField(blank=True, null=True)
+    handle = models.CharField(max_length=255, blank=True, null=True)
     stripe_prod_id = models.CharField(max_length=55, blank=True, null=True)
 
     def save(self, *args, **kwargs):
