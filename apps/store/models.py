@@ -36,6 +36,7 @@ class Variant(models.Model):
     product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
+    stripe_prod_id = models.CharField(max_length=55, blank=True, null=True)
 
     def __str__(self):
         return self.name
