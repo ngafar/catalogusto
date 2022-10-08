@@ -26,3 +26,13 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+class Variant(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    product = models.ForeignKey(Product, blank=True, null=True, on_delete=models.CASCADE)
+    pub_date = models.DateTimeField(auto_now_add=True)
+    last_edit = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
