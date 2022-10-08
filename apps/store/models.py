@@ -11,6 +11,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    variants = models.ManyToManyField('Variant', blank=True, related_name='product_variants')
     store = models.ForeignKey(Store, blank=True, null=True, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
     last_edit = models.DateTimeField(auto_now=True)
