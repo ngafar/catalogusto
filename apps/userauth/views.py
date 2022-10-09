@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 
 def user_login(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/dashboard')
     else:
         pass
 
@@ -18,7 +18,7 @@ def user_login(request):
         if user:
             if user.is_active:
                 login(request, user)
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/dashboard')
             else:
                 return(HttpResponse("Your Account is disabled"))
         else:
