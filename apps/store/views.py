@@ -77,7 +77,12 @@ def update_product(request, product_id):
     context_dict = {}
 
     product = Product.objects.get(id=product_id) 
+    context_dict['product'] = product
+    
     old_price_val = product.price
+
+    variants = Variant.objects.filter(product__id=product_id)
+    context_dict['variants'] = variants 
 
     if request.method == 'POST':
         product_form = ProductForm(data=request.POST, instance=product)
