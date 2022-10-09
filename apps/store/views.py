@@ -8,7 +8,7 @@ def dashboard(request):
     context_dict = {}
 
     return render(request, 'store/dashboard.html', context_dict)
-    
+
 
 #----------------
 # STORE
@@ -65,16 +65,39 @@ def create_product(request, store_id):
 
     return render(request, 'store/product-create.html', context_dict)
 
-def read_product(request, product_id):
+def update_product(request, product_id):
     context_dict = {}
 
     product = Product.objects.get(id=product_id) 
     context_dict['product'] = product
 
-    return render(request, 'store/product-read.html', context_dict)
+    if request.method == 'POST':
+        product_form = ProductForm(data=request.POST, instance=product)
+        product_form.fields['store'].widget = forms.HiddenInput()
 
-def update_product(request, product_id):
-    pass
+        if product_form.is_valid():
+            product = product_form.save()
+            product.store = store
+
+            # Create product in Stripe:
+            stripe_prod_obj = stripe.Product.create(
+                name = product.name, 
+                default_price_data = {
+                    'currency': store.currency, 
+                    'unit_amount_decimal': product.price * 100},
+                api_key = store.stripe_secret_key)
+
+            product.stripe_prod_id = stripe_prod_obj['id']
+            product.save()
+
+            return HttpResponseRedirect('/client/'+str(client.id))
+    else:
+        product_form = ProductForm(instance=product)
+        product_form.fields['store'].widget = forms.HiddenInput()
+
+    context_dict['product_form'] = product_form
+
+    return render(request, 'store/product-update.html', context_dict)
 
 def delete_product(request, product_id):
     pass 

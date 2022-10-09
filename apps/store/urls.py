@@ -4,14 +4,13 @@ from . import views, api
 urlpatterns = [
     # views.py
     path ('dashboard/', views.dashboard),
-    
+
     path('store/new/', views.create_store),
     path('store/<int:store_id>/', views.read_store),
     path('store/<int:store_id>/edit/', views.update_store),
     path('store/<int:store_id>/delete/', views.delete_store),
     
     path('store/<int:store_id>/add-product/', views.create_product),
-    path('product/<int:product_id>/', views.read_product),
     path('product/<int:product_id>/edit/', views.update_product),
     path('product/<int:product_id>/delete/', views.delete_product),
 
