@@ -21,7 +21,12 @@ def create_store(request):
     pass 
 
 def read_store(request, store_id):
-    pass 
+    context_dict = {}
+
+    products = Product.objects.filter(store__id=store_id)
+    context_dict['products'] = products
+
+    return render(request, 'store/store-read.html', context_dict) 
 
 def update_store(request, store_id):
     pass
