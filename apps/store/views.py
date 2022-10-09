@@ -78,7 +78,7 @@ def update_product(request, product_id):
 
         if product_form.is_valid():
             product = product_form.save()
-            product.store = store
+            #product.store = store
 
             # Create product in Stripe:
             stripe_prod_obj = stripe.Product.create(
@@ -146,7 +146,38 @@ def create_variant(request, product_id):
     return render(request, 'store/variant-create.html', context_dict)
 
 def update_variant(request, variant_id):
-    pass
+    context_dict = {}
+
+    variant = Variant.objects.get(id=variant_id)
+    context_dict['variant'] = variant
+
+    if request.method == 'POST':
+        variant_form = VariantForm(data=request.POST, instance=variant)
+        variant_form.fields['product'].widget = forms.HiddenInput()
+
+        if variant_form.is_valid():
+            variant = variant_form.save()
+            #variant.product = product
+
+            # Create product in Stripe:
+            stripe_prod_obj = stripe.Product.create(
+                name = f'{product.name} - {variant.name}', 
+                default_price_data = {
+                    'currency': product.store.currency, 
+                    'unit_amount_decimal': variant.price * 100},
+                api_key = product.store.stripe_secret_key)
+
+            variant.stripe_prod_id = stripe_prod_obj['id']
+            variant.save()
+
+            return HttpResponseRedirect('/client/'+str(client.id))
+    else:
+        variant_form = VariantForm(instance=variant)
+        variant_form.fields['product'].widget = forms.HiddenInput()
+
+    context_dict['variant_form'] = variant_form
+
+    return render(request, 'store/variant-update.html', context_dict)
 
 def delete_variant(request, variant_id):
     pass 
