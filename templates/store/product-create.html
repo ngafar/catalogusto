@@ -1,6 +1,16 @@
-<form method="POST" action="">
-    {% csrf_token %}
-    {{ product_form }}
+{% extends 'base.html' %}
 
-    <input type="submit" value="Submit" />
-</form>
+{% block title %}
+    New Product
+{% endblock %}
+
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ product_form }}
+
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+
+

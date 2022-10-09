@@ -22,6 +22,9 @@ def create_store(request):
 
 def read_store(request, store_id):
     context_dict = {}
+    
+    store = Store.objects.get(id=store_id)
+    context_dict['store'] = store
 
     products = Product.objects.filter(store__id=store_id)
     context_dict['products'] = products
@@ -187,6 +190,8 @@ def update_variant(request, variant_id):
     context_dict = {}
 
     variant = Variant.objects.get(id=variant_id)
+    context_dict['variant'] = variant
+
     old_price_val = variant.price
 
     if request.method == 'POST':

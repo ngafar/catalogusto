@@ -1,11 +1,20 @@
-<form method="POST" action="">
-    {% csrf_token %}
-    {{ product_form }}
+{% extends 'base.html' %}
 
-    <input type="submit" value="Submit" />
-</form>
+{% block title %}
+    {{ product.name }}
+{% endblock %}
 
-{% for variant in variants %} 
-    <a href="/variant/{{ variant.id}}/edit">{{ variant.name }}</a>
-    <br>
-{% endfor %}
+{% block content %}
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ product_form }}
+
+        <input type="submit" value="Submit" />
+    </form>
+
+    {% for variant in variants %} 
+        <a href="/variant/{{ variant.id}}/edit">{{ variant.name }}</a>
+        <br>
+    {% endfor %}
+{% endblock %}
+
