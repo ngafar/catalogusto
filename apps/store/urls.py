@@ -15,7 +15,6 @@ urlpatterns = [
     path('product/<int:product_id>/delete/', views.delete_product),
 
     path('product/<int:product_id>/add-variant', views.create_variant),
-    path('variant/<int:variant_id>/', views.read_variant),
     path('variant/<int:variant_id>/edit/', views.update_variant),
     path('variant/<int:variant_id>/delete/', views.delete_variant),
 

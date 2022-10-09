@@ -111,11 +111,8 @@ def delete_product(request, product_id):
 # VARIANT
 #----------------
 
-def create_variant(request):
+def create_variant(request, product_id):
     pass
-
-def read_variant(request, variant_id):
-    pass 
 
 def update_variant(request, variant_id):
     pass
