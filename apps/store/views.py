@@ -1,6 +1,7 @@
 import stripe
 from django import forms 
 from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
 from .models import Store, Product, Variant 
 from .forms import ProductForm
 
@@ -100,7 +101,10 @@ def update_product(request, product_id):
     return render(request, 'store/product-update.html', context_dict)
 
 def delete_product(request, product_id):
-    pass 
+    product = Product.objects.get(id=product_id) 
+    product.delete()
+    
+    return HttpResponseRedirect('/')
 
 
 #----------------
