@@ -180,4 +180,7 @@ def update_variant(request, variant_id):
     return render(request, 'store/variant-update.html', context_dict)
 
 def delete_variant(request, variant_id):
-    pass 
+    variant = Variant.objects.get(id=variant_id)
+    variant.delete()
+    
+    return HttpResponseRedirect('/')
