@@ -64,7 +64,7 @@ def create_product(request, store_id):
             product.stripe_prod_id = stripe_prod_obj['id']
             product.save()
 
-            return HttpResponseRedirect('/client/'+str(client.id))
+            return HttpResponseRedirect(f'/product/{product.id}/edit')
     else:
         product_form = ProductForm()
         product_form.fields['store'].widget = forms.HiddenInput()
@@ -129,7 +129,7 @@ def update_product(request, product_id):
             #prod.stripe_prod_id = stripe_prod_obj['id']
             prod.save()
 
-            return HttpResponseRedirect('/client/'+str(client.id))
+            return HttpResponseRedirect(f'/product/{product.id}/edit')
     else:
         product_form = ProductForm(instance=product)
         product_form.fields['store'].widget = forms.HiddenInput()
@@ -142,7 +142,7 @@ def delete_product(request, product_id):
     product = Product.objects.get(id=product_id) 
     product.delete()
     
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(f'/store/{product.store.id}/')
 
 
 #----------------
@@ -174,7 +174,7 @@ def create_variant(request, product_id):
             variant.stripe_prod_id = stripe_prod_obj['id']
             variant.save()
 
-            return HttpResponseRedirect('/client/'+str(client.id))
+            return HttpResponseRedirect(f'/product/{product.id}/edit')
     else:
         variant_form = VariantForm()
         variant_form.fields['product'].widget = forms.HiddenInput()
@@ -233,7 +233,7 @@ def update_variant(request, variant_id):
 
             var.save()
 
-            return HttpResponseRedirect('/client/'+str(client.id))
+            return HttpResponseRedirect(f'/product/{variant.product.id}/edit')
     else:
         variant_form = VariantForm(instance=variant)
         variant_form.fields['product'].widget = forms.HiddenInput()
@@ -246,4 +246,4 @@ def delete_variant(request, variant_id):
     variant = Variant.objects.get(id=variant_id)
     variant.delete()
     
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(f'/product/{variant.product.id}/edit')
