@@ -7,9 +7,11 @@ from .forms import ProductForm, VariantForm
 
 def dashboard(request):
     context_dict = {}
+    
+    stores = Store.objects.all()
+    context_dict['stores'] = stores
 
     return render(request, 'store/dashboard.html', context_dict)
-
 
 #----------------
 # STORE
