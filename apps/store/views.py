@@ -4,6 +4,12 @@ from django.shortcuts import render
 from .models import Store, Product, Variant 
 from .forms import ProductForm
 
+def dashboard(request):
+    context_dict = {}
+
+    return render(request, 'store/dashboard.html', context_dict)
+    
+
 #----------------
 # STORE
 #----------------

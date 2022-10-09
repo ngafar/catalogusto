@@ -3,6 +3,8 @@ from . import views, api
 
 urlpatterns = [
     # views.py
+    path ('dashboard/', views.dashboard),
+    
     path('store/new/', views.create_store),
     path('store/<int:store_id>/', views.read_store),
     path('store/<int:store_id>/edit/', views.update_store),
