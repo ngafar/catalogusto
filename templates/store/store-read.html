@@ -6,7 +6,7 @@
 
 {% block content %}
     {% for product in products %} 
-        <a href="/product/{{ product.id }}/edit">{{ product.name }}</a>
+        <a href="/product/{{ product.id }}">{{ product.name }}</a>
         <br>
     {% endfor %}
 {% endblock %}
