@@ -7,7 +7,7 @@ class Store(models.Model):
     stripe_secret_key = models.CharField(max_length=55)
     
     def save(self, *args, **kwargs):
-        self.currency = lower(self.currency)
+        self.currency = self.currency.lower()
         super(Store, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -2,7 +2,7 @@ from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import Store, Product, Variant 
-from .forms import ProductForm, VariantForm
+from .forms import StoreForm, ProductForm, VariantForm
 from . import stripe_utils
 
 def dashboard(request):
@@ -19,7 +19,22 @@ def dashboard(request):
 #----------------
 
 def create_store(request):
-    pass 
+    context_dict = {}
+
+    if request.method == 'POST':
+        store_form = StoreForm(data=request.POST)
+
+        if store_form.is_valid():
+            store = store_form.save()
+            store.save()
+
+            return HttpResponseRedirect(f'/store/{store.id}')
+    else:
+        store_form = StoreForm(data=request.POST)
+
+    context_dict['store_form'] = store_form
+
+    return render(request, 'store/store-create.html', context_dict)
 
 def read_store(request, store_id):
     context_dict = {}
