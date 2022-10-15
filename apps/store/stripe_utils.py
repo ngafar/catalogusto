@@ -28,7 +28,7 @@ def update_product(stripe_prod_id, name, currency, price, price_change, api_key)
 
         # Update name + set new price as default in Stripe:
         stripe.Product.modify(
-            variant.stripe_prod_id,
+            stripe_prod_id,
             name = name, 
             default_price = new_price['id'],
             api_key = api_key)
@@ -41,6 +41,6 @@ def update_product(stripe_prod_id, name, currency, price, price_change, api_key)
     else:
         # Only update name in Stripe:
         stripe.Product.modify(
-            variant.stripe_prod_id,
+            stripe_prod_id,
             name = name, 
             api_key = api_key)

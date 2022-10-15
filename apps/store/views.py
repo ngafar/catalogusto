@@ -1,9 +1,9 @@
-import stripe
 from django import forms 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
 from .models import Store, Product, Variant 
 from .forms import ProductForm, VariantForm
+from . import stripe_utils
 
 def dashboard(request):
     context_dict = {}
@@ -12,6 +12,7 @@ def dashboard(request):
     context_dict['stores'] = stores
 
     return render(request, 'store/dashboard.html', context_dict)
+
 
 #----------------
 # STORE
@@ -55,14 +56,9 @@ def create_product(request, store_id):
         if product_form.is_valid():
             product = product_form.save()
             product.store = store
-
-            # Create product in Stripe:
-            stripe_prod_obj = stripe.Product.create(
-                name = product.name, 
-                default_price_data = {
-                    'currency': store.currency, 
-                    'unit_amount_decimal': product.price * 100},
-                api_key = store.stripe_secret_key)
+            
+            # Stripe
+            stripe_prod_obj = stripe_utils.create_product(product.name, store.currency, product.price, store.stripe_secret_key) 
 
             product.stripe_prod_id = stripe_prod_obj['id']
             product.save()
@@ -93,44 +89,17 @@ def update_product(request, product_id):
 
         if product_form.is_valid():
             prod = product_form.save()
-            #prod.store = store
-
-            if product.price != old_price_val:
-                # Retrieve product from Stripe:
-                stripe_prod_obj = stripe.Product.retrieve(
-                    product.stripe_prod_id, 
-                    api_key = product.store.stripe_secret_key)
-                
-                old_price_stripe_id = stripe_prod_obj['default_price']
-
-                # Add new price:
-                new_price = stripe.Price.create(
-                    product = stripe_prod_obj['id'],
-                    currency = product.store.currency,
-                    unit_amount_decimal = product.price * 100,
-                    api_key = product.store.stripe_secret_key)
-
-                # Update name + set new default price in Stripe:
-                stripe.Product.modify(
-                    product.stripe_prod_id,
-                    name = product.name, 
-                    default_price = new_price['id'],
-                    api_key = product.store.stripe_secret_key)
-
-                # Deactivate old price in Stripe:
-                stripe.Price.modify( 
-                    old_price_stripe_id,
-                    active = "false",
-                    api_key = product.store.stripe_secret_key)
-            else:
-                # Only update name in Stripe:
-                stripe.Product.modify(
-                    product.stripe_prod_id,
-                    name = product.name, 
-                    api_key = product.store.stripe_secret_key)
-
-            #prod.stripe_prod_id = stripe_prod_obj['id']
             prod.save()
+
+            # Stripe
+            price_change = True if prod.price != old_price_val else False
+            stripe_utils.update_product(
+                product.stripe_prod_id, 
+                prod.name, 
+                product.store.currency, 
+                prod.price, 
+                price_change, 
+                product.store.stripe_secret_key)
 
             return HttpResponseRedirect(f'/product/{product.id}/edit')
     else:
@@ -166,13 +135,8 @@ def create_variant(request, product_id):
             variant = variant_form.save()
             variant.product = product
 
-            # Create product in Stripe:
-            stripe_prod_obj = stripe.Product.create(
-                name = f'{product.name} - {variant.name}', 
-                default_price_data = {
-                    'currency': product.store.currency, 
-                    'unit_amount_decimal': variant.price * 100},
-                api_key = product.store.stripe_secret_key)
+            # Stripe
+            stripe_prod_obj = stripe_utils.create_product(f'{product.name} - {variant.name}', product.store.currency, variant.price, product.store.stripe_secret_key)
 
             variant.stripe_prod_id = stripe_prod_obj['id']
             variant.save()
@@ -200,43 +164,17 @@ def update_variant(request, variant_id):
 
         if variant_form.is_valid():
             var = variant_form.save()
-            #var.product = product
-
-            if variant.price != old_price_val:
-                # Retrieve product from Stripe:
-                stripe_prod_obj = stripe.Product.retrieve(
-                    variant.stripe_prod_id, 
-                    api_key = variant.product.store.stripe_secret_key)
-                
-                old_price_stripe_id = stripe_prod_obj['default_price']
-
-                # Add new price:
-                new_price = stripe.Price.create(
-                    product = stripe_prod_obj['id'],
-                    currency = variant.product.store.currency,
-                    unit_amount_decimal = variant.price * 100,
-                    api_key = variant.product.store.stripe_secret_key)
-
-                # Update name + set new default price in Stripe:
-                stripe.Product.modify(
-                    variant.stripe_prod_id,
-                    name = f'{variant.product.name} - {variant.name}', 
-                    default_price = new_price['id'],
-                    api_key = variant.product.store.stripe_secret_key)
-
-                # Deactivate old price in Stripe:
-                stripe.Price.modify( 
-                    old_price_stripe_id,
-                    active = "false",
-                    api_key = variant.product.store.stripe_secret_key)
-            else:
-                # Only update name in Stripe:
-                stripe.Product.modify(
-                    variant.stripe_prod_id,
-                    name = f'{variant.product.name} - {variant.name}', 
-                    api_key = variant.product.store.stripe_secret_key)
-
             var.save()
+
+            # Stripe
+            price_change = True if variant.price != old_price_val else False
+            stripe_utils.update_product(
+                variant.stripe_prod_id, 
+                f'{variant.product.name} - {variant.name}', 
+                variant.product.store.currency, 
+                variant.price, 
+                price_change, 
+                variant.product.store.stripe_secret_key)
 
             return HttpResponseRedirect(f'/product/{variant.product.id}/edit')
     else:
