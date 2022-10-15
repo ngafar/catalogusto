@@ -6,6 +6,8 @@ from .serializers import ProductSerializer, VariantSerializer
 # PERMISSIONS:
 
 class TokenCheck():
+    message = "Invalid token"
+    
     def has_permission(self, request, view):
         requested_storeID = request.headers.get('storeID')
         requested_token = request.headers.get('token')
