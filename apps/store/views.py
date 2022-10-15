@@ -51,7 +51,10 @@ def update_store(request, store_id):
     pass
 
 def delete_store(request, store_id):
-    pass 
+    store = Store.objects.get(id=store_id) 
+    store.delete()
+    
+    return HttpResponseRedirect(f'/dashboard')
 
 
 #----------------
