@@ -9,6 +9,7 @@ urlpatterns = [
     path('store/<int:store_id>/', views.read_store),
     path('store/<int:store_id>/edit/', views.update_store),
     path('store/<int:store_id>/delete/', views.delete_store),
+    path('store/<int:store_id>/get-new-token/', views.new_store_token),
     
     path('store/<int:store_id>/add-product/', views.create_product),
     path('product/<int:product_id>/', views.update_product),

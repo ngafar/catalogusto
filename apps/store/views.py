@@ -60,7 +60,7 @@ def update_store(request, store_id):
             store = store_form.save()
             store.save()
 
-            return HttpResponseRedirect(f'/store/{store.id}')
+            return HttpResponseRedirect(f'/store/{store.id}/edit')
     else:
         store_form = StoreForm(instance=store)
 
@@ -73,6 +73,13 @@ def delete_store(request, store_id):
     store.delete()
     
     return HttpResponseRedirect(f'/dashboard')
+
+def new_store_token(request, store_id):
+    store = Store.objects.get(id=store_id) 
+    store.token = None # If "None," models.py will handle.
+    store.save()
+    
+    return HttpResponseRedirect(f'/store/{store.id}/edit')
 
 
 #----------------
