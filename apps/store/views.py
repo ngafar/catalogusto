@@ -63,7 +63,7 @@ def create_product(request, store_id):
             product.stripe_prod_id = stripe_prod_obj['id']
             product.save()
 
-            return HttpResponseRedirect(f'/product/{product.id}/edit')
+            return HttpResponseRedirect(f'/product/{product.id}')
     else:
         product_form = ProductForm()
         product_form.fields['store'].widget = forms.HiddenInput()
@@ -101,7 +101,7 @@ def update_product(request, product_id):
                 price_change, 
                 product.store.stripe_secret_key)
 
-            return HttpResponseRedirect(f'/product/{product.id}/edit')
+            return HttpResponseRedirect(f'/product/{product.id}')
     else:
         product_form = ProductForm(instance=product)
         product_form.fields['store'].widget = forms.HiddenInput()
@@ -148,7 +148,7 @@ def create_variant(request, product_id):
             # Add variant to M2M field in Product model:
             product.variants.add(variant)
 
-            return HttpResponseRedirect(f'/product/{product.id}/edit')
+            return HttpResponseRedirect(f'/product/{product.id}')
     else:
         variant_form = VariantForm()
         variant_form.fields['product'].widget = forms.HiddenInput()
@@ -183,7 +183,7 @@ def update_variant(request, variant_id):
                 price_change, 
                 variant.product.store.stripe_secret_key)
 
-            return HttpResponseRedirect(f'/product/{variant.product.id}/edit')
+            return HttpResponseRedirect(f'/product/{variant.product.id}')
     else:
         variant_form = VariantForm(instance=variant)
         variant_form.fields['product'].widget = forms.HiddenInput()
@@ -196,4 +196,4 @@ def delete_variant(request, variant_id):
     variant = Variant.objects.get(id=variant_id)
     variant.delete()
     
-    return HttpResponseRedirect(f'/product/{variant.product.id}/edit')
+    return HttpResponseRedirect(f'/product/{variant.product.id}')
