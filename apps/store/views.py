@@ -116,9 +116,6 @@ def update_product(request, product_id):
     
     old_price_val = product.price
 
-    variants = Variant.objects.filter(product__id=product_id)
-    context_dict['variants'] = variants 
-
     if request.method == 'POST':
         product_form = ProductForm(data=request.POST, instance=product)
         product_form.fields['store'].widget = forms.HiddenInput()
