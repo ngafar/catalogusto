@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils.text import slugify
 
@@ -5,9 +6,14 @@ class Store(models.Model):
     name = models.CharField(max_length=255)
     currency = models.CharField(max_length=3, default='usd')
     stripe_secret_key = models.CharField(max_length=55)
-    
+    token = models.CharField(max_length=45, blank=True, null=True)
+
     def save(self, *args, **kwargs):
         self.currency = self.currency.lower()
+
+        if self.token is None:
+            self.token = uuid.uuid4().hex
+
         super(Store, self).save(*args, **kwargs)
 
     def __str__(self):
