@@ -136,10 +136,17 @@ def create_variant(request, product_id):
             variant.product = product
 
             # Stripe
-            stripe_prod_obj = stripe_utils.create_product(f'{product.name} - {variant.name}', product.store.currency, variant.price, product.store.stripe_secret_key)
+            stripe_prod_obj = stripe_utils.create_product(
+                f'{product.name} - {variant.name}', 
+                product.store.currency, 
+                variant.price, 
+                product.store.stripe_secret_key)
 
             variant.stripe_prod_id = stripe_prod_obj['id']
             variant.save()
+
+            # Add variant to M2M field in Product model:
+            product.variants.add(variant)
 
             return HttpResponseRedirect(f'/product/{product.id}/edit')
     else:
