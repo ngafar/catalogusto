@@ -5,7 +5,8 @@ class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         fields = '__all__'
-
+        exclude = ['token',]
+        
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
