@@ -30,7 +30,7 @@ def create_store(request):
 
             return HttpResponseRedirect(f'/store/{store.id}')
     else:
-        store_form = StoreForm(data=request.POST)
+        store_form = StoreForm()
 
     context_dict['store_form'] = store_form
 
@@ -48,7 +48,25 @@ def read_store(request, store_id):
     return render(request, 'store/store-read.html', context_dict) 
 
 def update_store(request, store_id):
-    pass
+    context_dict = {}
+
+    store = Store.objects.get(id=store_id)
+    context_dict['store'] = store
+
+    if request.method == 'POST':
+        store_form = StoreForm(data=request.POST, instance=store)
+
+        if store_form.is_valid():
+            store = store_form.save()
+            store.save()
+
+            return HttpResponseRedirect(f'/store/{store.id}')
+    else:
+        store_form = StoreForm(instance=store)
+
+    context_dict['store_form'] = store_form
+
+    return render(request, 'store/store-update.html', context_dict)
 
 def delete_store(request, store_id):
     store = Store.objects.get(id=store_id) 
