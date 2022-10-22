@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block content %}
+    <h1>{{ store.name }}</h1>
+    <a href="/store/{{ store.id }}/add-product"><button class="btn btn-success">Add Product</button></a>
+    <hr>
+
     {% for product in products %} 
         <a href="/product/{{ product.id }}">{{ product.name }}</a>
         <br>

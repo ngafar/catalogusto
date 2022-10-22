@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block content %}
-    {% for store in stores %} 
-        <a href="/store/{{store.id}}">{{ store.name }}</a>
+    {% for store in stores %}
+        <p>
+            <a href="/store/{{store.id}}">{{ store.name }}</a>
+            -
+            <a href="/store/{{store.id}}/settings">Settings</a>
+        </p>
     {% endfor %}
+
+    <hr>
+
+    <p><a href="/store/new">New Store</a></p>
 {% endblock %}
